@@ -45,14 +45,16 @@ class OverviewFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         //The xml file name is created in auto generated class.
         //ex : fragment_overview > FragmentOverviewBinding.class
-//        val binding = FragmentOverviewBinding.inflate(inflater)
-        val binding = GridViewItemBinding.inflate(inflater)
+        val binding = FragmentOverviewBinding.inflate(inflater)
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         binding.setLifecycleOwner(this)
 
         // Giving the binding access to the OverviewViewModel
         binding.viewModel = viewModel
+
+        //Pointing the recycler view the adapter.
+        binding.recyclerView.adapter = MangaListAdapter()
 
         setHasOptionsMenu(true)
         return binding.root

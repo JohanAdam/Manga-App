@@ -34,12 +34,12 @@ import java.lang.Exception
  */
 class OverviewViewModel : ViewModel() {
 
-    // The internal MutableLiveData String that stores the status of the most recent request
-    private val _response = MutableLiveData<String>()
-
-    // The external immutable LiveData for the request status String
-    val response: LiveData<String>
-        get() = _response
+//    // The internal MutableLiveData String that stores the status of the most recent request
+//    private val _response = MutableLiveData<String>()
+//
+//    // The external immutable LiveData for the request status String
+//    val response: LiveData<String>
+//        get() = _response
 
     //Variable for coroutines job & a CoroutineScope using the Main Dispatcher.
     private val viewModelJob = Job()
@@ -49,8 +49,8 @@ class OverviewViewModel : ViewModel() {
     val status: LiveData<String>
         get() = _status
 
-    private val _result = MutableLiveData<MangaItemProperty>()
-    val result: LiveData<MangaItemProperty>
+    private val _result = MutableLiveData<List<MangaItemProperty>>()
+    val result: LiveData<List<MangaItemProperty>>
         get() = _result
 
     /**
@@ -72,30 +72,16 @@ class OverviewViewModel : ViewModel() {
             //The list will be return to this variable when ready.
             try {
                 var response = getMangaListDeferred.await()
-                _response.value = "Total loaded : ${response.mangaList.size}"
-
+//                _response.value = "Total loaded : ${response.mangaList.size}"
                 if (response.mangaList.size > 0) {
-                    _result.value = response.mangaList[0]
+                    _result.value = response.mangaList
                 }
 
             } catch (e: Exception) {
-                _response.value = "Failure : ${e.message}"
-
+//                _response.value = "Failure : ${e.message}"
                 _status.value = "Failure : ${e.message}"
             }
         }
-
-//        ApiObj.retrofitService.getTopManga().enqueue(object : Callback<MangaProperty> {
-//            override fun onFailure(call: Call<MangaProperty>, t: Throwable) {
-//                t.printStackTrace()
-//                _response.value = "Failure : " + t.message
-//            }
-//
-//            override fun onResponse(call: Call<MangaProperty>, response: Response<MangaProperty>) {
-//                _response.value = "Total loaded : ${response.body()?.mangaList?.size}"
-//            }
-//
-//        })
     }
 
     override fun onCleared() {
