@@ -29,24 +29,23 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
+enum class ApiStatus {
+    LOADING,
+    ERROR,
+    DONE
+}
+
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
 class OverviewViewModel : ViewModel() {
 
-//    // The internal MutableLiveData String that stores the status of the most recent request
-//    private val _response = MutableLiveData<String>()
-//
-//    // The external immutable LiveData for the request status String
-//    val response: LiveData<String>
-//        get() = _response
-
     //Variable for coroutines job & a CoroutineScope using the Main Dispatcher.
     private val viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val _status = MutableLiveData<String>()
-    val status: LiveData<String>
+    private val _status = MutableLiveData<ApiStatus>()
+    val status: LiveData<ApiStatus>
         get() = _status
 
     private val _result = MutableLiveData<List<MangaItemProperty>>()
@@ -71,15 +70,16 @@ class OverviewViewModel : ViewModel() {
             var getMangaListDeferred = ApiObj.retrofitService.getTopManga()
             //The list will be return to this variable when ready.
             try {
+                _status.value = ApiStatus.LOADING
+
                 var response = getMangaListDeferred.await()
-//                _response.value = "Total loaded : ${response.mangaList.size}"
-                if (response.mangaList.size > 0) {
-                    _result.value = response.mangaList
-                }
+
+                _status.value = ApiStatus.DONE
+                _result.value = response.mangaList
 
             } catch (e: Exception) {
-//                _response.value = "Failure : ${e.message}"
-                _status.value = "Failure : ${e.message}"
+                _status.value = ApiStatus.ERROR
+                _result.value = ArrayList()
             }
         }
     }

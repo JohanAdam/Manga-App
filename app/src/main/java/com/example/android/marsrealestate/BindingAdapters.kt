@@ -17,6 +17,7 @@
 
 package com.example.android.marsrealestate
 
+import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -24,8 +25,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.android.marsrealestate.network.MangaItemProperty
+import com.example.android.marsrealestate.overview.ApiStatus
 import com.example.android.marsrealestate.overview.MangaListAdapter
-import kotlin.math.acos
 
 /**
  * @param imgView To tell only ImageView can use this method.
@@ -55,5 +56,25 @@ fun bindAdapterToRecyclerView(recyclerView: RecyclerView, data: List<MangaItemPr
     val adapter = recyclerView.adapter as MangaListAdapter
     //submit list of data to the adapter.
     adapter.submitList(data)
+}
+
+/**
+ * Binding adapter to image view status. To show current status of API in UI.
+ */
+@BindingAdapter("bindApiStatus")
+fun bindAPIStatus(imageView: ImageView, status: ApiStatus?) {
+    when (status) {
+        ApiStatus.LOADING -> {
+            imageView.visibility = View.VISIBLE
+            imageView.setImageResource(R.drawable.loading_animation)
+        }
+        ApiStatus.ERROR -> {
+            imageView.visibility = View.VISIBLE
+            imageView.setImageResource(R.drawable.ic_connection_error)
+        }
+        ApiStatus.DONE -> {
+            imageView.visibility = View.GONE
+        }
+    }
 }
 
