@@ -18,9 +18,12 @@
 package com.example.android.marsrealestate.overview
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.example.android.marsrealestate.R
 import com.example.android.marsrealestate.databinding.FragmentOverviewBinding
 import com.example.android.marsrealestate.databinding.GridViewItemBinding
@@ -54,7 +57,20 @@ class OverviewFragment : Fragment() {
         binding.viewModel = viewModel
 
         //Pointing the recycler view the adapter.
-        binding.recyclerView.adapter = MangaListAdapter()
+        binding.recyclerView.adapter = MangaListAdapter(MangaListAdapter.OnClickListener {
+            Log.d("d","Click click")
+            viewModel.openPropertyDetailPage(it)
+        })
+
+        //Set an observer to listen for go to new page.
+        viewModel.navigateToSelectedProperty.observe(this, Observer {
+            it?.let {
+               //Navigate to detail page.
+                this.findNavController().navigate(OverviewFragmentDirections.actionShowDetail(it))
+                //Mark event as completed in view model.
+                viewModel.openPropertyDetailPageCompleted()
+            }
+        })
 
         setHasOptionsMenu(true)
         return binding.root

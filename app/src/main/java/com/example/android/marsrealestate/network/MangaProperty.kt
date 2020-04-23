@@ -17,13 +17,16 @@
 
 package com.example.android.marsrealestate.network
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 
 data class MangaProperty(
         @Json(name = "top")
         val mangaList: List<MangaItemProperty>
 )
 
+@Parcelize
 data class MangaItemProperty(
         val mal_id: Int?,
         val rank: Int?,
@@ -35,5 +38,8 @@ data class MangaItemProperty(
         val end_date: String?,
         val members: Int?,
         val score: Double?,
-        val image_url: String?
-)
+        val image_url: String?) : Parcelable {
+
+        val isCompleted
+                get() = end_date != null
+}

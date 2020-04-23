@@ -30,11 +30,19 @@ import com.example.android.marsrealestate.databinding.FragmentDetailBinding
 class DetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
-        @Suppress("UNUSED_VARIABLE")
-        val application = requireNotNull(activity).application
         val binding = FragmentDetailBinding.inflate(inflater)
+        val application = requireNotNull(activity).application
+
+        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         binding.setLifecycleOwner(this)
+
+        //Retrieve data sent to this page.
+        val dataReceived = DetailFragmentArgs.fromBundle(arguments!!).selectedManga
+        //Create view model. (Send the data received to viewmodel)
+        val viewModelFactory = DetailViewModelFactory(dataReceived, application)
+        //Bind the view model created to xml view model.
+        binding.viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
+
         return binding.root
     }
 }

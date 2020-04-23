@@ -22,7 +22,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.marsrealestate.network.ApiObj
 import com.example.android.marsrealestate.network.MangaItemProperty
-import com.example.android.marsrealestate.network.MangaProperty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -44,13 +43,20 @@ class OverviewViewModel : ViewModel() {
     private val viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+    //Status of the API.
     private val _status = MutableLiveData<ApiStatus>()
     val status: LiveData<ApiStatus>
         get() = _status
 
+    //The Manga List.
     private val _result = MutableLiveData<List<MangaItemProperty>>()
     val result: LiveData<List<MangaItemProperty>>
         get() = _result
+
+    //Event for detail page.
+    private val _navigateToSelectedProperty = MutableLiveData<MangaItemProperty>()
+    val navigateToSelectedProperty: LiveData<MangaItemProperty>
+        get() = _navigateToSelectedProperty
 
     /**
      * Call getMarsRealEstateProperties() on init so we can display status immediately.
@@ -82,6 +88,14 @@ class OverviewViewModel : ViewModel() {
                 _result.value = ArrayList()
             }
         }
+    }
+
+    fun openPropertyDetailPage(mangaItemProperty: MangaItemProperty) {
+        _navigateToSelectedProperty.value = mangaItemProperty
+    }
+
+    fun openPropertyDetailPageCompleted() {
+        _navigateToSelectedProperty.value = null
     }
 
     override fun onCleared() {

@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.marsrealestate.databinding.GridViewItemBinding
 import com.example.android.marsrealestate.network.MangaItemProperty
 
-class MangaListAdapter : ListAdapter<MangaItemProperty, MangaListAdapter.MangaListViewHolder>(DiffCallback) {
+class MangaListAdapter(val onClickListener: OnClickListener) : ListAdapter<MangaItemProperty, MangaListAdapter.MangaListViewHolder>(DiffCallback) {
 
     companion object DiffCallback :DiffUtil.ItemCallback<MangaItemProperty>() {
         override fun areItemsTheSame(oldItem: MangaItemProperty, newItem: MangaItemProperty): Boolean {
@@ -44,14 +44,26 @@ class MangaListAdapter : ListAdapter<MangaItemProperty, MangaListAdapter.MangaLi
 
     override fun onBindViewHolder(holder: MangaListAdapter.MangaListViewHolder, position: Int) {
         val mangaItemProperty = getItem(position)
+        //Bind the data to xml.
         holder.bind(mangaItemProperty)
+
+        //Set on click listener and data to sent.
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(mangaItemProperty)
+        }
     }
 
     class MangaListViewHolder(private var binding: GridViewItemBinding) :
             RecyclerView.ViewHolder(binding.root) {
         fun bind(mangaItemProperty: MangaItemProperty) {
+            //Bind the data to xml.
             binding.data  = mangaItemProperty
             binding.executePendingBindings()
         }
+    }
+
+    //Click item callback.
+    class OnClickListener(val clickListener: (mangaItemProperty: MangaItemProperty) -> Unit) {
+        fun onClick(mangaItemProperty: MangaItemProperty) = clickListener(mangaItemProperty)
     }
 }

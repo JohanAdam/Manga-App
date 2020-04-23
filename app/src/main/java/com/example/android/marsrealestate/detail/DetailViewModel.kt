@@ -18,11 +18,38 @@ package com.example.android.marsrealestate.detail
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import com.example.android.marsrealestate.network.MangaProperty
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import com.example.android.marsrealestate.R
+import com.example.android.marsrealestate.network.MangaItemProperty
 
 /**
  * The [ViewModel] that is associated with the [DetailFragment].
  */
-class DetailViewModel(@Suppress("UNUSED_PARAMETER")mangaProperty: MangaProperty, app: Application) : AndroidViewModel(app) {
+class DetailViewModel(
+        mangaProperty: MangaItemProperty, app: Application) :
+        AndroidViewModel(app) {
+
+    private val _selectedManga = MutableLiveData<MangaItemProperty>()
+    val selectedManga: LiveData<MangaItemProperty>
+        get() = _selectedManga
+
+    //Transform the data before expose to xml.
+    val displayMangaComplete = Transformations.map(selectedManga) {
+        app.applicationContext.getString(R.string.title_status,
+                when (it.isCompleted) {
+                    true -> app.applicationContext.getString(R.string.title_complete)
+                    false -> app.applicationContext.getString(R.string.title_inprogress)
+                })
+    }
+
+    init {
+        _selectedManga.value = mangaProperty
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+    }
+
 }
