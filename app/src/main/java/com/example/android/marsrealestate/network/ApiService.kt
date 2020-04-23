@@ -29,6 +29,15 @@ import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.jikan.moe/v3/"
 
+enum class ApiFilter(val value: String) {
+    SHOW_RATED_G("g"),
+    SHOW_RATED_PG("pg"),
+    SHOW_RATED_PG13("pg13"),
+    SHOW_RATED_R17("r17"),
+    SHOW_RATED_R("r"),
+    SHOW_RATED_RX("rx"),
+}
+
 //Moshi builder.
 private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
@@ -48,9 +57,10 @@ interface ApiService {
     fun getTopManga():
             Deferred<MangaPropertyTop>
 
-//    @GET("search/manga?genre=4")
+    //    @GET("search/manga?genre=4")
     @GET("search/anime?rated=g")
-    fun searchManga():
+    fun searchManga(
+            @Query("rated") type: String):
             Deferred<MangaProperty>
 
 }

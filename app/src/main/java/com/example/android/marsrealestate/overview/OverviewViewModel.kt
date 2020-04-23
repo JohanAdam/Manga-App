@@ -17,9 +17,11 @@
 
 package com.example.android.marsrealestate.overview
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.android.marsrealestate.network.ApiFilter
 import com.example.android.marsrealestate.network.ApiObj
 import com.example.android.marsrealestate.network.MangaItemProperty
 import kotlinx.coroutines.CoroutineScope
@@ -59,21 +61,19 @@ class OverviewViewModel : ViewModel() {
         get() = _navigateToSelectedProperty
 
     /**
-     * Call getMarsRealEstateProperties() on init so we can display status immediately.
+     * Call getAnimeListByRated() on init so we can display status immediately.
      */
     init {
-        getLatestTopMangaList()
+        getAnimeListByRated(ApiFilter.SHOW_RATED_G)
     }
 
     /**
-     * Sets the value of the status LiveData to the Mars API status.
+     * Sets the value of the status LiveData to the API status.
      */
-    private fun getLatestTopMangaList() {
-        //Call the retrofit.
-
+    private fun getAnimeListByRated(filter: ApiFilter) {
         //Call using coroutines.
         coroutineScope.launch {
-            var getMangaListDeferred = ApiObj.retrofitService.searchManga()
+            var getMangaListDeferred = ApiObj.retrofitService.searchManga(filter.value)
             //The list will be return to this variable when ready.
             try {
                 _status.value = ApiStatus.LOADING
@@ -89,6 +89,11 @@ class OverviewViewModel : ViewModel() {
                 _result.value = ArrayList()
             }
         }
+    }
+
+    fun updateFilter(filter: ApiFilter) {
+        Log.e("e","updateFilter")
+        getAnimeListByRated(filter)
     }
 
     fun openPropertyDetailPage(mangaItemProperty: MangaItemProperty) {

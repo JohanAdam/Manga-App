@@ -27,6 +27,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.android.marsrealestate.R
 import com.example.android.marsrealestate.databinding.FragmentOverviewBinding
 import com.example.android.marsrealestate.databinding.GridViewItemBinding
+import com.example.android.marsrealestate.network.ApiFilter
 
 /**
  * This fragment shows the the status of the Mars real-estate web services transaction.
@@ -65,7 +66,7 @@ class OverviewFragment : Fragment() {
         //Set an observer to listen for go to new page.
         viewModel.navigateToSelectedProperty.observe(this, Observer {
             it?.let {
-               //Navigate to detail page.
+                //Navigate to detail page.
                 this.findNavController().navigate(OverviewFragmentDirections.actionShowDetail(it))
                 //Mark event as completed in view model.
                 viewModel.openPropertyDetailPageCompleted()
@@ -82,5 +83,19 @@ class OverviewFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.overflow_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        viewModel.updateFilter(
+                when(item.itemId) {
+                    R.id.show_pg -> ApiFilter.SHOW_RATED_PG
+                    R.id.show_pg13 -> ApiFilter.SHOW_RATED_PG13
+                    R.id.show_r -> ApiFilter.SHOW_RATED_R
+                    R.id.show_r_plus -> ApiFilter.SHOW_RATED_R
+                    R.id.show_rx -> ApiFilter.SHOW_RATED_RX
+                    else -> ApiFilter.SHOW_RATED_G
+                }
+        )
+        return true
     }
 }

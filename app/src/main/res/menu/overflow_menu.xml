@@ -19,12 +19,21 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/show_all_menu"
-        android:title="@string/show_all" />
+      android:id="@+id/show_g"
+      android:title="G - All Ages" />
     <item
-        android:id="@+id/show_rent_menu"
-        android:title="@string/show_rent" />
+      android:id="@+id/show_pg"
+      android:title="PG - Children" />
     <item
-        android:id="@+id/show_buy_menu"
-        android:title="@string/show_buy" />
+      android:id="@+id/show_pg13"
+      android:title="PG-13" />
+    <item
+      android:id="@+id/show_r"
+      android:title="R" />
+    <item
+      android:id="@+id/show_r_plus"
+      android:title="R+" />
+    <item
+      android:id="@+id/show_rx"
+      android:title="Rx" />
 </menu>
