@@ -22,9 +22,15 @@ import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
 
 data class MangaProperty(
-        @Json(name = "top")
-        val mangaList: List<MangaItemProperty>
+        //Search manga.
+        @Json(name = "results")
+        val resultList: List<MangaItemProperty>
 )
+
+data class MangaPropertyTop(
+//Top manga.
+        @Json(name = "top")
+        val mangaList: List<MangaItemProperty>)
 
 @Parcelize
 data class MangaItemProperty(

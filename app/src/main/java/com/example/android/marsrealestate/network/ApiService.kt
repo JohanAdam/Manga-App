@@ -25,8 +25,8 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
-//private const val BASE_URL = "https://mars.udacity.com/"
 private const val BASE_URL = "https://api.jikan.moe/v3/"
 
 //Moshi builder.
@@ -46,6 +46,11 @@ interface ApiService {
 
     @GET("top/manga")
     fun getTopManga():
+            Deferred<MangaPropertyTop>
+
+//    @GET("search/manga?genre=4")
+    @GET("search/anime?rated=g")
+    fun searchManga():
             Deferred<MangaProperty>
 
 }

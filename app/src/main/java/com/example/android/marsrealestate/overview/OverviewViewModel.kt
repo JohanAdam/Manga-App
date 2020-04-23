@@ -73,7 +73,7 @@ class OverviewViewModel : ViewModel() {
 
         //Call using coroutines.
         coroutineScope.launch {
-            var getMangaListDeferred = ApiObj.retrofitService.getTopManga()
+            var getMangaListDeferred = ApiObj.retrofitService.searchManga()
             //The list will be return to this variable when ready.
             try {
                 _status.value = ApiStatus.LOADING
@@ -81,9 +81,10 @@ class OverviewViewModel : ViewModel() {
                 var response = getMangaListDeferred.await()
 
                 _status.value = ApiStatus.DONE
-                _result.value = response.mangaList
+                _result.value = response.resultList
 
             } catch (e: Exception) {
+                e.printStackTrace()
                 _status.value = ApiStatus.ERROR
                 _result.value = ArrayList()
             }
