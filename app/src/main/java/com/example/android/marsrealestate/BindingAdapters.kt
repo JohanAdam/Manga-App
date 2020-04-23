@@ -67,6 +67,7 @@ fun bindAPIStatus(imageView: ImageView, status: ApiStatus?) {
         ApiStatus.LOADING -> {
             imageView.visibility = View.VISIBLE
             imageView.setImageResource(R.drawable.loading_animation)
+            imageView.bringToFront()
         }
         ApiStatus.ERROR -> {
             imageView.visibility = View.VISIBLE
