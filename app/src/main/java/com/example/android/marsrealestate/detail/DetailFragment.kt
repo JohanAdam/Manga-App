@@ -34,7 +34,7 @@ class DetailFragment : Fragment() {
         val application = requireNotNull(activity).application
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         //Retrieve data sent to this page.
         val dataReceived = DetailFragmentArgs.fromBundle(arguments!!).selectedManga

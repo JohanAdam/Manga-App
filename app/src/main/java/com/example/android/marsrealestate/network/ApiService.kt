@@ -30,15 +30,6 @@ import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.jikan.moe/v3/"
 
-enum class ApiFilter(val value: String) {
-    SHOW_RATED_G("g"),
-    SHOW_RATED_PG("pg"),
-    SHOW_RATED_PG13("pg13"),
-    SHOW_RATED_R17("r17"),
-    SHOW_RATED_R("r"),
-    SHOW_RATED_RX("rx"),
-}
-
 //Moshi builder.
 private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
@@ -64,6 +55,22 @@ private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .build()
 
+//To Expose the retrofit to the rest of the App.
+object ApiObj {
+    val retrofitService: ApiService by lazy {
+        retrofit.create(ApiService::class.java)
+    }
+}
+
+enum class ApiFilter(val value: String) {
+    SHOW_RATED_G("g"),
+    SHOW_RATED_PG("pg"),
+    SHOW_RATED_PG13("pg13"),
+    SHOW_RATED_R17("r17"),
+    SHOW_RATED_R("r"),
+    SHOW_RATED_RX("rx"),
+}
+
 interface ApiService {
 
     @GET("top/manga")
@@ -76,13 +83,6 @@ interface ApiService {
             @Query("rated") type: String):
             Deferred<MangaProperty>
 
-}
-
-//To Expose the retrofit to the rest of the App.
-object ApiObj {
-    val retrofitService: ApiService by lazy {
-        retrofit.create(ApiService::class.java)
-    }
 }
 
 

@@ -90,7 +90,7 @@ class OverviewFragment : Fragment() {
                 when(item.itemId) {
                     R.id.show_pg -> ApiFilter.SHOW_RATED_PG
                     R.id.show_pg13 -> ApiFilter.SHOW_RATED_PG13
-                    R.id.show_r -> ApiFilter.SHOW_RATED_R
+                    R.id.show_r -> ApiFilter.SHOW_RATED_R17
                     R.id.show_r_plus -> ApiFilter.SHOW_RATED_R
                     R.id.show_rx -> ApiFilter.SHOW_RATED_RX
                     else -> ApiFilter.SHOW_RATED_G
