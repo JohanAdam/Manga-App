@@ -37,7 +37,7 @@ class DetailFragment : Fragment() {
         binding.lifecycleOwner = this
 
         //Retrieve data sent to this page.
-        val dataReceived = DetailFragmentArgs.fromBundle(arguments!!).selectedManga
+        val dataReceived = DetailFragmentArgs.fromBundle(requireArguments()).selectedManga
         //Create view model. (Send the data received to viewmodel)
         val viewModelFactory = DetailViewModelFactory(dataReceived, application)
         //Bind the view model created to xml view model.

@@ -40,7 +40,7 @@
         tools:layout="@layout/fragment_detail">
         <argument
           android:name="selectedManga"
-          app:argType="com.example.android.marsrealestate.network.MangaItemProperty" />
+          app:argType="com.example.android.marsrealestate.model.Anime" />
     </fragment>
 
 </navigation>

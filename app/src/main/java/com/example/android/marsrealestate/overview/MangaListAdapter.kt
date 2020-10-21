@@ -23,17 +23,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.marsrealestate.databinding.GridViewItemBinding
+import com.example.android.marsrealestate.model.Anime
 import com.example.android.marsrealestate.network.MangaItemProperty
 
-class MangaListAdapter(val onClickListener: OnClickListener) : ListAdapter<MangaItemProperty, MangaListAdapter.MangaListViewHolder>(DiffCallback) {
+class MangaListAdapter(val onClickListener: OnClickListener) : ListAdapter<Anime, MangaListAdapter.MangaListViewHolder>(DiffCallback) {
 
-    companion object DiffCallback :DiffUtil.ItemCallback<MangaItemProperty>() {
-        override fun areItemsTheSame(oldItem: MangaItemProperty, newItem: MangaItemProperty): Boolean {
+    companion object DiffCallback :DiffUtil.ItemCallback<Anime>() {
+        override fun areItemsTheSame(oldItem: Anime, newItem: Anime): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: MangaItemProperty, newItem: MangaItemProperty): Boolean {
-            return oldItem.mal_id == newItem.mal_id
+        override fun areContentsTheSame(oldItem: Anime, newItem: Anime): Boolean {
+            return oldItem.id == newItem.id
         }
 
     }
@@ -43,27 +44,27 @@ class MangaListAdapter(val onClickListener: OnClickListener) : ListAdapter<Manga
     }
 
     override fun onBindViewHolder(holder: MangaListAdapter.MangaListViewHolder, position: Int) {
-        val mangaItemProperty = getItem(position)
+        val anime = getItem(position)
         //Bind the data to xml.
-        holder.bind(mangaItemProperty)
+        holder.bind(anime)
 
         //Set on click listener and data to sent.
         holder.itemView.setOnClickListener {
-            onClickListener.onClick(mangaItemProperty)
+            onClickListener.onClick(anime)
         }
     }
 
     class MangaListViewHolder(private var binding: GridViewItemBinding) :
             RecyclerView.ViewHolder(binding.root) {
-        fun bind(mangaItemProperty: MangaItemProperty) {
+        fun bind(anime: Anime) {
             //Bind the data to xml.
-            binding.data  = mangaItemProperty
+            binding.data  = anime
             binding.executePendingBindings()
         }
     }
 
     //Click item callback.
-    class OnClickListener(val clickListener: (mangaItemProperty: MangaItemProperty) -> Unit) {
-        fun onClick(mangaItemProperty: MangaItemProperty) = clickListener(mangaItemProperty)
+    class OnClickListener(val clickListener: (anime: Anime) -> Unit) {
+        fun onClick(anime: Anime) = clickListener(anime)
     }
 }

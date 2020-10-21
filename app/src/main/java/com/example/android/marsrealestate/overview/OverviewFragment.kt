@@ -21,25 +21,36 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.android.marsrealestate.R
 import com.example.android.marsrealestate.databinding.FragmentOverviewBinding
 import com.example.android.marsrealestate.databinding.GridViewItemBinding
+import com.example.android.marsrealestate.model.Anime
 import com.example.android.marsrealestate.network.ApiFilter
+import com.example.android.marsrealestate.utils.DataState
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_overview.*
 
 /**
  * This fragment shows the the status of the Mars real-estate web services transaction.
  */
+@AndroidEntryPoint
 class OverviewFragment : Fragment() {
+
+    companion object {
+        private const val TAG = "OverviewFragment"
+    }
 
     /**
      * Lazily initialize our [OverviewViewModel].
      */
-    private val viewModel: OverviewViewModel by lazy {
-        ViewModelProviders.of(this).get(OverviewViewModel::class.java)
-    }
+//    private val viewModel: OverviewViewModel by lazy {
+//        ViewModelProviders.of(this).get(OverviewViewModel::class.java)
+//    }
+    private val viewModel: OverviewViewModel by viewModels()
 
     /**
      * Inflates the layout with Data Binding, sets its lifecycle owner to the OverviewFragment
@@ -52,10 +63,10 @@ class OverviewFragment : Fragment() {
         val binding = FragmentOverviewBinding.inflate(inflater)
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
-        binding.setLifecycleOwner(this)
+//        binding.setLifecycleOwner(this)
 
         // Giving the binding access to the OverviewViewModel
-        binding.viewModel = viewModel
+//        binding.viewModel = viewModel
 
         //Pointing the recycler view the adapter.
         binding.recyclerView.adapter = MangaListAdapter(MangaListAdapter.OnClickListener {
@@ -64,7 +75,7 @@ class OverviewFragment : Fragment() {
         })
 
         //Set an observer to listen for go to new page.
-        viewModel.navigateToSelectedProperty.observe(this, Observer {
+        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
             it?.let {
                 //Navigate to detail page.
                 this.findNavController().navigate(OverviewFragmentDirections.actionShowDetail(it))
@@ -73,8 +84,51 @@ class OverviewFragment : Fragment() {
             }
         })
 
+        viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
+            when (dataState) {
+                is DataState.Success<List<Anime>> -> {
+                    Log.d(TAG, "Success :" )
+                    displayProgressBar(false)
+                    displayData(dataState.data)
+                }
+                is DataState.Failed -> {
+                    showError()
+                    dataState.exception.printStackTrace()
+                    Log.e(TAG, "Error :" + dataState.exception.message)
+                }
+                is DataState.Loading -> {
+                    Log.d(TAG, "Loading..")
+                    displayProgressBar(true)
+                }
+            }
+        })
+
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun displayData(animes: List<Anime>) {
+        val adapter = recycler_view.adapter as MangaListAdapter
+        //submit list of data to the adapter.
+        adapter.submitList(animes)
+    }
+
+    private fun displayProgressBar(isDisplayed: Boolean) {
+        if (isDisplayed) {
+            (recycler_view.adapter as MangaListAdapter).submitList(null)
+
+            iv_status.visibility = View.VISIBLE
+            iv_status.setImageResource(R.drawable.loading_animation)
+            iv_status.bringToFront()
+        } else {
+            iv_status.visibility = View.GONE
+        }
+    }
+
+    private fun showError() {
+        iv_status.visibility = View.VISIBLE
+        iv_status.setImageResource(R.drawable.ic_connection_error)
+        iv_status.bringToFront()
     }
 
     /**
@@ -98,4 +152,5 @@ class OverviewFragment : Fragment() {
         )
         return true
     }
+
 }

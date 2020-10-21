@@ -24,9 +24,11 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.android.marsrealestate.model.Anime
 import com.example.android.marsrealestate.network.MangaItemProperty
 import com.example.android.marsrealestate.overview.ApiStatus
 import com.example.android.marsrealestate.overview.MangaListAdapter
+import com.example.android.marsrealestate.utils.DataState
 
 /**
  * @param imgView To tell only ImageView can use this method.
@@ -51,7 +53,7 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
  * Attach adapter with a list direct to the recycler view.
  */
 @BindingAdapter("attachListData")
-fun bindAdapterToRecyclerView(recyclerView: RecyclerView, data: List<MangaItemProperty>?) {
+fun bindAdapterToRecyclerView(recyclerView: RecyclerView, data: List<Anime>?) {
     //Attach new adapter to rv.
     val adapter = recyclerView.adapter as MangaListAdapter
     //submit list of data to the adapter.
@@ -61,21 +63,21 @@ fun bindAdapterToRecyclerView(recyclerView: RecyclerView, data: List<MangaItemPr
 /**
  * Binding adapter to image view status. To show current status of API in UI.
  */
-@BindingAdapter("bindApiStatus")
-fun bindAPIStatus(imageView: ImageView, status: ApiStatus?) {
-    when (status) {
-        ApiStatus.LOADING -> {
-            imageView.visibility = View.VISIBLE
-            imageView.setImageResource(R.drawable.loading_animation)
-            imageView.bringToFront()
-        }
-        ApiStatus.ERROR -> {
-            imageView.visibility = View.VISIBLE
-            imageView.setImageResource(R.drawable.ic_connection_error)
-        }
-        ApiStatus.DONE -> {
-            imageView.visibility = View.GONE
-        }
-    }
-}
+//@BindingAdapter("bindApiStatus")
+//fun bindAPIStatus(imageView: ImageView, status: DataState?) {
+//    when (status) {
+//        ApiStatus.LOADING -> {
+//            imageView.visibility = View.VISIBLE
+//            imageView.setImageResource(R.drawable.loading_animation)
+//            imageView.bringToFront()
+//        }
+//        ApiStatus.ERROR -> {
+//            imageView.visibility = View.VISIBLE
+//            imageView.setImageResource(R.drawable.ic_connection_error)
+//        }
+//        ApiStatus.DONE -> {
+//            imageView.visibility = View.GONE
+//        }
+//    }
+//}
 

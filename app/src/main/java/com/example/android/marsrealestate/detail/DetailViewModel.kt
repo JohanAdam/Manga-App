@@ -22,17 +22,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.android.marsrealestate.R
+import com.example.android.marsrealestate.model.Anime
 import com.example.android.marsrealestate.network.MangaItemProperty
 
 /**
  * The [ViewModel] that is associated with the [DetailFragment].
  */
 class DetailViewModel(
-        mangaProperty: MangaItemProperty, app: Application) :
+        animeProperty: Anime, app: Application) :
         AndroidViewModel(app) {
 
-    private val _selectedManga = MutableLiveData<MangaItemProperty>()
-    val selectedManga: LiveData<MangaItemProperty>
+    private val _selectedManga = MutableLiveData<Anime>()
+    val selectedManga: LiveData<Anime>
         get() = _selectedManga
 
     //Transform the data before expose to xml.
@@ -45,7 +46,7 @@ class DetailViewModel(
     }
 
     init {
-        _selectedManga.value = mangaProperty
+        _selectedManga.value = animeProperty
     }
 
     override fun onCleared() {

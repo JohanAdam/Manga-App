@@ -18,17 +18,18 @@
 package com.example.android.marsrealestate.overview
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.*
+import com.example.android.marsrealestate.model.Anime
 import com.example.android.marsrealestate.network.ApiFilter
-import com.example.android.marsrealestate.network.ApiObj
 import com.example.android.marsrealestate.network.MangaItemProperty
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import com.example.android.marsrealestate.repository.MainRepository
+import com.example.android.marsrealestate.utils.DataState
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 enum class ApiStatus {
     LOADING,
@@ -36,68 +37,72 @@ enum class ApiStatus {
     DONE
 }
 
+sealed class MainStateEvent {
+    object GetAnimesEvents: MainStateEvent()
+}
+
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
-class OverviewViewModel : ViewModel() {
+class OverviewViewModel
+    @ViewModelInject
+    constructor(
+            private val mainRepository: MainRepository,
+            @Assisted private val savedStateHandle: SavedStateHandle
+    ): ViewModel() {
 
-    //Variable for coroutines job & a CoroutineScope using the Main Dispatcher.
-    private val viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    companion object {
+        private const val TAG = "OverviewViewModel"
+    }
 
-    //Status of the API.
-    private val _status = MutableLiveData<ApiStatus>()
-    val status: LiveData<ApiStatus>
-        get() = _status
-
-    //The Manga List.
-    private val _result = MutableLiveData<List<MangaItemProperty>>()
-    val result: LiveData<List<MangaItemProperty>>
-        get() = _result
+    private val _dataState: MutableLiveData<DataState<List<Anime>>> = MutableLiveData()
+    val dataState: LiveData<DataState<List<Anime>>>
+        get() = _dataState
 
     //Event for detail page.
-    private val _navigateToSelectedProperty = MutableLiveData<MangaItemProperty>()
-    val navigateToSelectedProperty: LiveData<MangaItemProperty>
+    private val _navigateToSelectedProperty = MutableLiveData<Anime>()
+    val navigateToSelectedProperty: LiveData<Anime>
         get() = _navigateToSelectedProperty
 
     /**
      * Call getAnimeListByRated() on init so we can display status immediately.
      */
     init {
-        getAnimeListByRated(ApiFilter.SHOW_RATED_G)
+        getAnimes(ApiFilter.SHOW_RATED_G)
+    }
+
+    fun getAnimes(filter: ApiFilter) {
+        Log.d(TAG, "getAnimes " + filter.value)
+        setStateEvent(filter, MainStateEvent.GetAnimesEvents)
     }
 
     /**
-     * Sets the value of the status LiveData to the API status.
+     * Events that happen in this view models.
      */
-    private fun getAnimeListByRated(filter: ApiFilter) {
-        //Call using coroutines.
-        coroutineScope.launch {
-            var getMangaListDeferred = ApiObj.retrofitService.searchManga(filter.value)
-            //The list will be return to this variable when ready.
-            try {
-                _status.value = ApiStatus.LOADING
+    private fun setStateEvent(filter: ApiFilter, mainStateEvent: MainStateEvent) {
+        Log.d(TAG, "setStateEvent")
 
-                var response = getMangaListDeferred.await()
-
-                _status.value = ApiStatus.DONE
-                _result.value = response.resultList
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _status.value = ApiStatus.ERROR
-                _result.value = ArrayList()
+        viewModelScope.launch {
+            when(mainStateEvent) {
+                is MainStateEvent.GetAnimesEvents -> {
+                    Log.d(TAG, "setStateEvent GetAnimesEvents")
+                    mainRepository.getAnimes(filter.value)
+                            .onEach { dataState ->
+                                _dataState.value = dataState
+                            }
+                            .launchIn(viewModelScope)
+                }
             }
         }
     }
 
     fun updateFilter(filter: ApiFilter) {
         Log.e("e","updateFilter")
-        getAnimeListByRated(filter)
+        getAnimes(filter)
     }
 
-    fun openPropertyDetailPage(mangaItemProperty: MangaItemProperty) {
-        _navigateToSelectedProperty.value = mangaItemProperty
+    fun openPropertyDetailPage(anime: Anime) {
+        _navigateToSelectedProperty.value = anime
     }
 
     fun openPropertyDetailPageCompleted() {
@@ -107,6 +112,7 @@ class OverviewViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         //Cancel the api call then viewmodel destroy.
-        viewModelJob.cancel()
+        viewModelScope.cancel()
+//        viewModelJob.cancel()
     }
 }

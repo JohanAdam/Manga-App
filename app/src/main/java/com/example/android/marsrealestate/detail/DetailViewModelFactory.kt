@@ -19,19 +19,18 @@ package com.example.android.marsrealestate.detail
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.android.marsrealestate.network.MangaItemProperty
-import com.example.android.marsrealestate.network.MangaProperty
+import com.example.android.marsrealestate.model.Anime
 
 /**
  * Simple ViewModel factory that provides the MarsProperty and context to the ViewModel.
  */
 class DetailViewModelFactory(
-        private val mangaProperty: MangaItemProperty,
+        private val animeProperty: Anime,
         private val application: Application) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
-            return DetailViewModel(mangaProperty, application) as T
+            return DetailViewModel(animeProperty, application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

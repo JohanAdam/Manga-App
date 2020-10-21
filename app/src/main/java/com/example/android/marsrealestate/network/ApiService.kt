@@ -62,15 +62,6 @@ object ApiObj {
     }
 }
 
-enum class ApiFilter(val value: String) {
-    SHOW_RATED_G("g"),
-    SHOW_RATED_PG("pg"),
-    SHOW_RATED_PG13("pg13"),
-    SHOW_RATED_R17("r17"),
-    SHOW_RATED_R("r"),
-    SHOW_RATED_RX("rx"),
-}
-
 interface ApiService {
 
     @GET("top/manga")

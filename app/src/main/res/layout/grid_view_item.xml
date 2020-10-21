@@ -24,7 +24,7 @@
     <data>
         <variable
           name="data"
-          type="com.example.android.marsrealestate.network.MangaItemProperty" />
+          type="com.example.android.marsrealestate.model.Anime" />
     </data>
 
     <ImageView
