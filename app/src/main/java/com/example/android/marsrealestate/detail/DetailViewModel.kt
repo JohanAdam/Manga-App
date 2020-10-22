@@ -17,20 +17,24 @@
 package com.example.android.marsrealestate.detail
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.*
 import com.example.android.marsrealestate.R
 import com.example.android.marsrealestate.model.Anime
 import com.example.android.marsrealestate.network.MangaItemProperty
+import com.example.android.marsrealestate.repository.MainRepository
 
 /**
  * The [ViewModel] that is associated with the [DetailFragment].
  */
-class DetailViewModel(
-        animeProperty: Anime, app: Application) :
-        AndroidViewModel(app) {
+
+class DetailViewModel
+    @ViewModelInject
+    constructor(
+            private val app: Application,
+            @Assisted private val savedStateHandle: SavedStateHandle
+    ): ViewModel() {
 
     private val _selectedManga = MutableLiveData<Anime>()
     val selectedManga: LiveData<Anime>
@@ -45,8 +49,17 @@ class DetailViewModel(
                 })
     }
 
-    init {
-        _selectedManga.value = animeProperty
+    fun init(dataReceived: Anime) {
+        _selectedManga.value = dataReceived
+    }
+
+    fun getStatus(): String {
+        return app.applicationContext.getString(R.string.title_status,
+                when (selectedManga.value?.isCompleted) {
+                    true -> app.applicationContext.getString(R.string.title_complete)
+                    false -> app.applicationContext.getString(R.string.title_inprogress)
+                    else -> "null"
+                })
     }
 
     override fun onCleared() {
