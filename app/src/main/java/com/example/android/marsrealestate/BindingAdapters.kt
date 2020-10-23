@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.android.marsrealestate.model.Anime
-import com.example.android.marsrealestate.network.MangaItemProperty
 import com.example.android.marsrealestate.overview.ApiStatus
 import com.example.android.marsrealestate.overview.MangaListAdapter
 import com.example.android.marsrealestate.utils.DataState
