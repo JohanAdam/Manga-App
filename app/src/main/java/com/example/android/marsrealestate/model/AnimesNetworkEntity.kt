@@ -6,7 +6,11 @@ import com.google.gson.annotations.SerializedName
 data class AnimesNetworkEntity(
         @SerializedName("results")
         @Expose
-        var result: List<AnimeNetworkEntity>
+        var result: List<AnimeNetworkEntity>,
+
+        @SerializedName("top")
+        @Expose
+        var top: List<AnimeNetworkEntity>
 )
 
 data class AnimeNetworkEntity(

@@ -23,11 +23,9 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.android.marsrealestate.R
 import com.example.android.marsrealestate.databinding.FragmentOverviewBinding
-import com.example.android.marsrealestate.databinding.GridViewItemBinding
 import com.example.android.marsrealestate.model.Anime
 import com.example.android.marsrealestate.network.ApiFilter
 import com.example.android.marsrealestate.utils.DataState
@@ -69,7 +67,7 @@ class OverviewFragment : Fragment() {
 //        binding.viewModel = viewModel
 
         //Pointing the recycler view the adapter.
-        binding.recyclerView.adapter = MangaListAdapter(MangaListAdapter.OnClickListener {
+        binding.recyclerView.adapter = AnimeListAdapter(AnimeListAdapter.OnClickListener {
             Log.d("d","Click click")
             viewModel.openPropertyDetailPage(it)
         })
@@ -108,14 +106,14 @@ class OverviewFragment : Fragment() {
     }
 
     private fun displayData(animes: List<Anime>) {
-        val adapter = recycler_view.adapter as MangaListAdapter
+        val adapter = recycler_view.adapter as AnimeListAdapter
         //submit list of data to the adapter.
         adapter.submitList(animes)
     }
 
     private fun displayProgressBar(isDisplayed: Boolean) {
         if (isDisplayed) {
-            (recycler_view.adapter as MangaListAdapter).submitList(null)
+            (recycler_view.adapter as AnimeListAdapter).submitList(null)
 
             iv_status.visibility = View.VISIBLE
             iv_status.setImageResource(R.drawable.loading_animation)

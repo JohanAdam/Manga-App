@@ -17,7 +17,6 @@
 
 package com.example.android.marsrealestate
 
-import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -25,9 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.android.marsrealestate.model.Anime
-import com.example.android.marsrealestate.overview.ApiStatus
-import com.example.android.marsrealestate.overview.MangaListAdapter
-import com.example.android.marsrealestate.utils.DataState
+import com.example.android.marsrealestate.overview.AnimeListAdapter
 
 /**
  * @param imgView To tell only ImageView can use this method.
@@ -54,7 +51,7 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
 @BindingAdapter("attachListData")
 fun bindAdapterToRecyclerView(recyclerView: RecyclerView, data: List<Anime>?) {
     //Attach new adapter to rv.
-    val adapter = recyclerView.adapter as MangaListAdapter
+    val adapter = recyclerView.adapter as AnimeListAdapter
     //submit list of data to the adapter.
     adapter.submitList(data)
 }

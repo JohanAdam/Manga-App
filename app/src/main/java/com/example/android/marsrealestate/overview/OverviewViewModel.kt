@@ -23,7 +23,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.android.marsrealestate.model.Anime
 import com.example.android.marsrealestate.network.ApiFilter
-import com.example.android.marsrealestate.network.MangaItemProperty
 import com.example.android.marsrealestate.repository.MainRepository
 import com.example.android.marsrealestate.utils.DataState
 import kotlinx.coroutines.cancel
@@ -86,7 +85,7 @@ class OverviewViewModel
             when(mainStateEvent) {
                 is MainStateEvent.GetAnimesEvents -> {
                     Log.d(TAG, "setStateEvent GetAnimesEvents")
-                    mainRepository.getAnimes(filter.value)
+                    mainRepository.getTopAnimes()
                             .onEach { dataState ->
                                 _dataState.value = dataState
                             }

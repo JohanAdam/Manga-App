@@ -41,8 +41,14 @@ constructor() : EntityMapper<AnimeNetworkEntity, Anime> {
         )
     }
 
-    fun mapFromEntityList(entities: AnimesNetworkEntity): List<Anime> {
+    fun mapResultFromEntityList(entities: AnimesNetworkEntity): List<Anime> {
         return entities.result.map  {
+            mapFromEntityToDm(it)
+        }
+    }
+
+    fun mapTopFromEntityList(entities: AnimesNetworkEntity): List<Anime> {
+        return entities.top.map {
             mapFromEntityToDm(it)
         }
     }

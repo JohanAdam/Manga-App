@@ -19,7 +19,32 @@ constructor(
         private const val TAG = "MainRepository"
     }
 
-    suspend fun getAnimes(filter: String): Flow<DataState<List<Anime>>> = flow {
+    suspend fun getTopAnimes() : Flow<DataState<List<Anime>>> = flow {
+        Log.d(TAG, "getTopAnimes")
+
+        //Return Loading.
+        emit(DataState.Loading)
+
+        try {
+            //Get list from API.
+            val animesNetEntity = networkService.getTopAnime(1)
+
+            //Convert network model TO domain model.
+            val animes = networkMapper.mapTopFromEntityList(animesNetEntity)
+
+            Log.d(TAG, "getTopAnimes: size " + animes.size)
+
+            //Return result.
+            emit(DataState.Success(animes))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            //Return error.
+            emit(DataState.Failed(e))
+        }
+
+    }
+
+    suspend fun getAnimesResult(filter: String): Flow<DataState<List<Anime>>> = flow {
         Log.d(TAG, "getAnimes")
 
         //Return loading.
@@ -30,7 +55,7 @@ constructor(
             val animesNetEntity = networkService.getAnimeListByRate(filter)
 
             //Convert network model TO domain model.
-            val animes = networkMapper.mapFromEntityList(animesNetEntity)
+            val animes = networkMapper.mapResultFromEntityList(animesNetEntity)
 
             Log.d(TAG, "getAnimes: size " + animes.size)
 

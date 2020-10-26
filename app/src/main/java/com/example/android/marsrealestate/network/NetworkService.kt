@@ -1,8 +1,10 @@
 package com.example.android.marsrealestate.network
 
+import com.example.android.marsrealestate.model.AnimeNetworkEntity
 import com.example.android.marsrealestate.model.AnimesNetworkEntity
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 enum class ApiFilter(val value: String) {
@@ -15,6 +17,10 @@ enum class ApiFilter(val value: String) {
 }
 
 interface NetworkService {
+
+    @GET ("top/anime/{page}")
+    suspend fun getTopAnime(
+            @Path("page") page: Int?): AnimesNetworkEntity
 
     @GET("search/anime")
     suspend fun getAnimeListByRate(

@@ -24,9 +24,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.marsrealestate.databinding.GridViewItemBinding
 import com.example.android.marsrealestate.model.Anime
-import com.example.android.marsrealestate.network.MangaItemProperty
 
-class MangaListAdapter(val onClickListener: OnClickListener) : ListAdapter<Anime, MangaListAdapter.MangaListViewHolder>(DiffCallback) {
+class AnimeListAdapter(val onClickListener: OnClickListener) : ListAdapter<Anime, AnimeListAdapter.MangaListViewHolder>(DiffCallback) {
 
     companion object DiffCallback :DiffUtil.ItemCallback<Anime>() {
         override fun areItemsTheSame(oldItem: Anime, newItem: Anime): Boolean {
@@ -39,11 +38,11 @@ class MangaListAdapter(val onClickListener: OnClickListener) : ListAdapter<Anime
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaListAdapter.MangaListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaListViewHolder {
         return MangaListViewHolder(GridViewItemBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
-    override fun onBindViewHolder(holder: MangaListAdapter.MangaListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MangaListViewHolder, position: Int) {
         val anime = getItem(position)
         //Bind the data to xml.
         holder.bind(anime)

@@ -22,7 +22,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.android.marsrealestate.R
 import com.example.android.marsrealestate.model.Anime
-import com.example.android.marsrealestate.network.MangaItemProperty
 import com.example.android.marsrealestate.repository.MainRepository
 
 /**
