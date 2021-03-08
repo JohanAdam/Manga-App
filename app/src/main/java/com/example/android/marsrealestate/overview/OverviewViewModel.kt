@@ -85,7 +85,7 @@ class OverviewViewModel
             when(mainStateEvent) {
                 is MainStateEvent.GetAnimesEvents -> {
                     Log.d(TAG, "setStateEvent GetAnimesEvents")
-                    mainRepository.getTopAnimes()
+                    mainRepository.getAnimesResult(filter)
                             .onEach { dataState ->
                                 _dataState.value = dataState
                             }

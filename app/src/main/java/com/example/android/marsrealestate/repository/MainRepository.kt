@@ -2,6 +2,7 @@ package com.example.android.marsrealestate.repository
 
 import android.util.Log
 import com.example.android.marsrealestate.model.Anime
+import com.example.android.marsrealestate.network.ApiFilter
 import com.example.android.marsrealestate.network.NetworkMapper
 import com.example.android.marsrealestate.network.NetworkService
 import com.example.android.marsrealestate.utils.DataState
@@ -44,7 +45,7 @@ constructor(
 
     }
 
-    suspend fun getAnimesResult(filter: String): Flow<DataState<List<Anime>>> = flow {
+    suspend fun getAnimesResult(filter: ApiFilter): Flow<DataState<List<Anime>>> = flow {
         Log.d(TAG, "getAnimes")
 
         //Return loading.
@@ -52,7 +53,7 @@ constructor(
 
         try {
             //Get list from API.
-            val animesNetEntity = networkService.getAnimeListByRate(filter)
+            val animesNetEntity = networkService.getAnimeListByRate(filter.value)
 
             //Convert network model TO domain model.
             val animes = networkMapper.mapResultFromEntityList(animesNetEntity)
